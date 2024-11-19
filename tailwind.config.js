@@ -14,14 +14,13 @@ export default {
       },
       fontFamily: {
         'concertone': ['Concert One', 'sans-serif'],
-        'dosis': ['Dosis', 'sans-serif'],
+        'BarlowCondensed': ['Barlow Condensed', 'sans-serif'],
       },
       colors: {
         'color-1': '#A682FF',
-        'color-2': '#EAFFFD',
+        'color-2': '#FFFFFF',
         'color-3': '#04030F',
-        'color-4': '#006D77',
-        'color-5': '#662E9B',
+        'color-4': '#662E9B',
       },
     },
   },
