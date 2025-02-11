@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FavoriteButton from '../FavoriteButton/FavoriteButton';
-import { useNavigate } from 'react-router-dom';
 
 const PokemonCard = ({ pokemon }) => {
   const handleImageError = (event) => {
-    event.target.src = 'https://via.placeholder.com/96'; 
+    event.target.src = 'https://via.placeholder.com/96';
   };
+  const formattedName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 text-center relative">
-
-      <div className="absolute top-2 right-2 bg-gray-800 text-white px-2 py-1 rounded-full text-xs font-bold font-manrope">
+    <div
+      className="bg-gradient-to-b from-purple-200 to-white rounded-lg shadow-md p-6 text-center relative max-w-md mx-auto hover:scale-105 transition-transform"
+    >
+      <div className="absolute top-3 right-3 bg-color-3 text-white px-3 py-1 rounded-full text-sm font-bold font-manrope">
         #{pokemon.id}
       </div>
       <img
         src={pokemon.image}
         alt={pokemon.name}
-        onError={handleImageError} 
-        className="w-40 h-40 mx-auto mb-2"
+        onError={handleImageError}
+        className="w-48 h-48 mx-auto mb-4" 
       />
-      <h3 className="text-lg font-bold">{pokemon.name}</h3>
+      <div className="backdrop-blur-sm bg-white/5 rounded-lg p-2 flex items-center justify-center gap-2">
+        <h3 className="text-xl font-bold text-slate-800">{formattedName}</h3> 
+        <FavoriteButton />
+      </div>
     </div>
   );
 };
