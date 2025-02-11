@@ -13,8 +13,8 @@ export default {
         },
       },
       fontFamily: {
-        'concertone': ['Concert One', 'sans-serif'],
-        'BarlowCondensed': ['Barlow Condensed', 'sans-serif'],
+        'outfit': ['Outfit', 'sans-serif'],
+        'manrope': ['Manrope', 'sans-serif'],
       },
       colors: {
         'color-1': '#A682FF',

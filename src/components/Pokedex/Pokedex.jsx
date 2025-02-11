@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import SearchBar from '../SearchBar/SearchBar';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
-const Pokedex = () => {
+const Pokedex = ({ searchQuery }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,8 +11,18 @@ const Pokedex = () => {
       try {
         const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100');
         const data = await response.json();
-        setPokemonList(data.results);
-        setFilteredPokemon(data.results);
+
+        const pokemonWithImages = data.results.map((pokemon, index) => {
+          const id = index + 1; 
+          return {
+            ...pokemon,
+            id: id,
+            image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`,
+          };
+        });
+
+        setPokemonList(pokemonWithImages);
+        setFilteredPokemon(pokemonWithImages);
       } catch (error) {
         console.error('Error fetching Pokémon data:', error);
       } finally {
@@ -24,26 +33,28 @@ const Pokedex = () => {
     fetchPokemonData();
   }, []);
 
-  const handleSearch = async (query) => {
-    const isNumber = !isNaN(query);
-    let foundPokemon = null;
+  useEffect(() => {
+    if (searchQuery) {
+      const isNumber = !isNaN(searchQuery);
+      let foundPokemon = null;
 
-    if (isNumber) {
-      const id = parseInt(query, 10);
-      if (id > 0 && id <= pokemonList.length) {
-        foundPokemon = pokemonList[id - 1];
+      if (isNumber) {
+        const id = parseInt(searchQuery, 10);
+        foundPokemon = pokemonList.find((p) => p.id === id);
+      } else {
+        foundPokemon = pokemonList.find((p) => p.name === searchQuery.toLowerCase());
+      }
+
+      if (foundPokemon) {
+        setFilteredPokemon([foundPokemon]);
+      } else {
+        alert('No se encontró ningún Pokémon. Por favor, verifica tu búsqueda.');
+        setFilteredPokemon(pokemonList);
       }
     } else {
-      foundPokemon = pokemonList.find(p => p.name === query);
+      setFilteredPokemon(pokemonList);
     }
-
-    if (foundPokemon) {
-      setFilteredPokemon([foundPokemon]);
-    } else {
-      alert('No se encontró ningún Pokémon. Por favor, verifica tu búsqueda.');
-      setFilteredPokemon(pokemonList); 
-    }
-  };
+  }, [searchQuery, pokemonList]);
 
   if (loading) {
     return <div className="text-center">Loading...</div>;
@@ -51,10 +62,9 @@ const Pokedex = () => {
 
   return (
     <div>
-      <SearchBar onSearch={handleSearch} />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {filteredPokemon.map((pokemon, index) => (
-          <PokemonCard key={index} pokemon={pokemon} id={index + 1} />
+        {filteredPokemon.map((pokemon) => (
+          <PokemonCard key={pokemon.id} pokemon={pokemon} />
         ))}
       </div>
     </div>

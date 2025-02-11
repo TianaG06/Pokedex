@@ -2,29 +2,24 @@ import React, { useState } from 'react';
 import FavoriteButton from '../FavoriteButton/FavoriteButton';
 import { useNavigate } from 'react-router-dom';
 
-const PokemonCard = ({ pokemon, id }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const navigate = useNavigate();
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+const PokemonCard = ({ pokemon }) => {
+  const handleImageError = (event) => {
+    event.target.src = 'https://via.placeholder.com/96'; 
   };
 
   return (
-    <div
-      onClick={() => navigate(`/pokemon/${id}`)}
-      className="cursor-pointer border p-4 rounded shadow hover:shadow-lg transition-all"
-    >
-      <h3 className="text-lg font-bold capitalize">{pokemon.name}</h3>
+    <div className="bg-white rounded-lg shadow-md p-4 text-center relative">
+
+      <div className="absolute top-2 right-2 bg-gray-800 text-white px-2 py-1 rounded-full text-xs font-bold font-manrope">
+        #{pokemon.id}
+      </div>
       <img
-        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${id}.png`}
+        src={pokemon.image}
         alt={pokemon.name}
-        className="w-32 h-32 mx-auto"
+        onError={handleImageError} 
+        className="w-40 h-40 mx-auto mb-2"
       />
-      <FavoriteButton isFavorite={isFavorite} onClick={(e) => {
-        e.stopPropagation(); 
-        toggleFavorite();
-      }} />
+      <h3 className="text-lg font-bold">{pokemon.name}</h3>
     </div>
   );
 };

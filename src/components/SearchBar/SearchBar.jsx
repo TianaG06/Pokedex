@@ -12,17 +12,17 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex items-center gap-2 mb-4">
+    <div className="flex items-center gap-6 mb-6">
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Buscar Pokémon por nombre o ID"
-        className="border p-2 rounded w-full"
+        className="border border-gray-300 p-3 rounded-full w-[400px] shadow-md focus:outline-none focus:ring-2 focus:ring-color-1 transition cursor-text font-manrope text-lg text-color-3 sm:w-full" 
       />
       <button
         onClick={handleSearch}
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className="font-manrope bg-color-1 text-white px-6 py-3 rounded-full hover:bg-color-2 hover:text-black shadow-lg transition-transform hover:scale-105 text-lg" 
       >
         Buscar
       </button>
