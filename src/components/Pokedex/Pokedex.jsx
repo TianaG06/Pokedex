@@ -5,16 +5,16 @@ const Pokedex = ({ searchQuery }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [filteredPokemon, setFilteredPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); 
-  const pokemonPerPage = 20; 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pokemonPerPage = 20;
 
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100');
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000');
         const data = await response.json();
         const pokemonWithImages = data.results.map((pokemon, index) => {
-          const id = index + 1; 
+          const id = index + 1;
           return {
             ...pokemon,
             id: id,
@@ -65,33 +65,63 @@ const Pokedex = ({ searchQuery }) => {
   const indexOfFirstPokemon = indexOfLastPokemon - pokemonPerPage;
   const currentPokemon = filteredPokemon.slice(indexOfFirstPokemon, indexOfLastPokemon);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const totalPages = Math.ceil(filteredPokemon.length / pokemonPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
         {currentPokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          <div key={pokemon.id}>
+            <PokemonCard pokemon={pokemon} />
+          </div>
         ))}
       </div>
 
-      <div className="flex justify-center mt-4 space-x-2">
+      <div className="flex justify-center items-center mt-8 space-x-4">
         <button
-          className="px-4 py-2 bg-color-3 text-white rounded disabled:bg-gray-400"
+          className="px-4 py-2 bg-color-1 text-white font-manrope rounded-full shadow-md hover:bg-color-4 hover:shadow-lg transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          Anterior
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
         </button>
-        <span className="px-4 py-2 bg-gray-200 text-gray-800 rounded">
-          Página {currentPage}
-        </span>
+
+        <div className="w-10 h-10 flex items-center justify-center bg-color-2 text-color-3 font-manrope font-bold rounded-full shadow-md">
+          {currentPage}
+        </div>
+
         <button
-          className="px-4 py-2 bg-color-3 text-white rounded disabled:bg-gray-400"
+          className="px-4 py-2 bg-color-1 text-white font-manrope rounded-full shadow-md hover:bg-color-4 hover:shadow-lg transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={() => paginate(currentPage + 1)}
           disabled={indexOfLastPokemon >= filteredPokemon.length}
         >
-          Siguiente
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
         </button>
       </div>
     </div>

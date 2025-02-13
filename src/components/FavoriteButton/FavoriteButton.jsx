@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const FavoriteButton = () => {
+const FavoriteButton = ({ pokemonId }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    setIsFavorite(favorites.includes(pokemonId));
+  }, [pokemonId]);
+
+
+  const toggleFavorite = () => {
+    if (!pokemonId) {
+      console.error('Error: pokemonId es null o undefined');
+      return;
+    }
+
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    if (isFavorite) {
+      favorites = favorites.filter((id) => id !== pokemonId);
+    } else {
+
+      if (!favorites.includes(pokemonId)) {
+        favorites.push(pokemonId);
+      }
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    setIsFavorite(!isFavorite);
+
+    const event = new CustomEvent('favoritesUpdated');
+    window.dispatchEvent(event);
+  };
+
   return (
-    <button className="text-red-400 hover:text-red-400 focus:outline-none">
+    <button
+      className="focus:outline-none"
+      onClick={toggleFavorite}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
-        fill="none"
+        className={`h-6 w-6 ${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500`}
+        fill={isFavorite ? 'currentColor' : 'none'}
         viewBox="0 0 24 24"
         stroke="currentColor"
       >

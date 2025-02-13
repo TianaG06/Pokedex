@@ -22,7 +22,7 @@ const PokemonCard = ({ pokemon }) => {
       />
       <div className="backdrop-blur-sm bg-white/5 rounded-lg p-2 flex items-center justify-center gap-2">
         <h3 className="text-xl font-bold text-slate-800">{formattedName}</h3> 
-        <FavoriteButton />
+        <FavoriteButton pokemonId={pokemon.id} />
       </div>
     </div>
   );
